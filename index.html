@@ -1,0 +1,175 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Medical SeenJeem Online</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <div class="app">
+    <header class="topbar">
+      <div class="brand">⚕️ Medical SeenJeem❤️</div>
+      <div class="controls">
+        <button id="themeBtn" class="btn small">🌙 Dark</button>
+        <button id="muteBtn" class="btn small">🔇 Mute</button>
+      </div>
+    </header>
+
+    <main class="main">
+      <!-- Room Setup -->
+      <section id="roomSetup" class="card">
+        <h2>Online Match Setup</h2>
+        <div class="row">
+          <label>Your Name</label>
+          <input id="playerNameInput" placeholder="Your name" />
+        </div>
+        <div class="row">
+          <label>Enter Room ID (any number)</label>
+          <input id="roomIdInput" placeholder="1234" />
+        </div>
+        <div class="actions">
+          <button id="joinRoomBtn" class="btn primary">Join Room ▶</button>
+        </div>
+        <p id="roleInfo" class="muted"></p>
+      </section>
+
+      <!-- Game Setup -->
+      <section id="setup" class="card hidden">
+        <h2>Game Setup</h2>
+
+        <div class="row">
+          <label>Question Bank</label>
+          <select id="questionBank">
+            <option value="">-- Select Bank --</option>
+            <option value="Academic/questions_medicine.json">Medicine</option>
+            <option value="Academic/questions_medicine_2.json">Medicine (Set 2)</option>
+
+            <option value="Academic/questions_misc.json">Misc</option>
+            <option value="Academic/questions_misc_2.json">Misc (Set 2)</option>
+
+            <option value="Academic/questions_obgyn.json">ObGyn</option>
+            <option value="Academic/questions_obgyn_2.json">ObGyn (Set 2)</option>
+
+            <option value="Academic/questions_pediatrics.json">Pediatrics</option>
+            <option value="Academic/questions_pediatrics_2.json">Pediatrics (Set 2)</option>
+
+            <option value="Academic/questions_surgery.json">Surgery</option>
+            <option value="Academic/questions_surgery_2.json">Surgery (Set 2)</option>
+
+            <option value="Academic/questions_physiology.json">Physiology</option>
+            <option value="Academic/questions_ethics.json">Ethics</option>
+            <option value="Academic/questions_microbiology.json">Microbiology</option>
+            <option value="Academic/questions_pharmacology.json">Pharmacology</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label>Upload Custom Question Bank (JSON) (Optional)</label>
+          <input id="customBank" type="file" accept=".json" />
+        </div>
+
+        <div class="row">
+          <label>Difficulty</label>
+          <select id="difficulty">
+            <option value="mixed">Mixed</option>
+            <option value="easy">Easy</option>
+            <option value="medium">Medium</option>
+            <option value="hard">Hard</option>
+          </select>
+        </div>
+
+        <div class="row">
+          <label>Time per question (seconds)</label>
+          <input id="timeLimit" type="number" min="0" value="30" />
+          <small>0 = no timer</small>
+        </div>
+
+        <div class="row">
+          <label>Number of questions per game</label>
+          <input id="numQuestions" type="number" min="1" value="10" />
+        </div>
+
+        <div class="row">
+          <label>
+            <input type="checkbox" id="showExplanation" checked />
+            Show explanation after each question
+          </label>
+        </div>
+
+        <div class="actions">
+          <button id="startBtn" class="btn primary">Start Game ▶</button>
+        </div>
+      </section>
+
+      <!-- Game Screen -->
+      <section id="game" class="card hidden">
+        <div class="scoreboard">
+          <div class="team A">
+            <div class="team-name" id="teamAName">Team A</div>
+            <div class="team-score" id="scoreA">0</div>
+            <div class="lifelines" id="lifelinesA"></div>
+          </div>
+          <div class="center-info">
+            <div id="turnLabel">Turn: Team A</div>
+            <div id="progress">Q 0 / 0</div>
+            <div id="timer" class="timer">⏱ 0s</div>
+          </div>
+          <div class="team B">
+            <div class="team-name" id="teamBName">Team B</div>
+            <div class="team-score" id="scoreB">0</div>
+            <div class="lifelines" id="lifelinesB"></div>
+          </div>
+        </div>
+
+        <div id="questionCard" class="question-card">
+          <div id="qCategory" class="q-meta"></div>
+          <div id="qDifficulty" class="q-meta"></div>
+          <h3 id="questionText">Question text</h3>
+
+          <div id="choices" class="choices"></div>
+
+          <div id="feedback" class="feedback"></div>
+
+          <div class="q-actions">
+            <div class="lifelines-row">
+              <button id="use50" class="btn">50:50</button>
+              <button id="usePass" class="btn">Pass</button>
+              <button id="useConsult" class="btn">Consult</button>
+            </div>
+            <div class="next-row">
+              <button id="nextBtn" class="btn primary hidden">➡ Next Question</button>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Game Over -->
+      <section id="gameOver" class="card hidden gameover-card">
+        <h2>🎉 Game Over</h2>
+        <p id="finalText" class="winner-text"></p>
+        <div class="actions">
+          <button id="restartBtn" class="btn">Back to Setup</button>
+          <button id="rematchBtn" class="btn primary">🔄 Rematch</button>
+          <a href="/leaderboard" class="btn small">🏆 View Leaderboard</a>
+        </div>
+      </section>
+    </main>
+
+    <footer class="footer">
+      Built with ❤️ SeenJeem · <a href="/leaderboard" class="leaderboard-link">🏆 Leaderboard</a>
+    </footer>
+  </div>
+
+  <!-- الأصوات -->
+  <audio id="soundCorrect" src="correct.mp3" preload="auto"></audio>
+  <audio id="soundWrong" src="wrong.mp3" preload="auto"></audio>
+  <audio id="soundTimeout" src="timeout.mp3" preload="auto"></audio>
+  <audio id="soundLifeline" src="lifeline.mp3" preload="auto"></audio>
+  <audio id="bgMusic" src="bg.mp3" preload="auto" loop></audio>
+
+  <!-- Socket.IO client -->
+  <script src="/socket.io/socket.io.js"></script>
+  <script src="script.js"></script>
+</body>
+</html>

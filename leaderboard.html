@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>لوحة المتصدرين</title>
+  <link rel="stylesheet" href="style.css">
+
+  <style>
+    body {
+      font-family: "Trebuchet MS", sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      margin: 0;
+      padding: 20px;
+    }
+
+    .leaderboard-container {
+      max-width: 720px;
+      margin: 0 auto;
+      background: var(--card);
+      padding: 24px;
+      border-radius: 18px;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.15);
+      animation: fadeIn 0.8s ease-in;
+    }
+
+    h1 {
+      text-align: center;
+      font-size: 26px;
+      font-weight: 800;
+      background: linear-gradient(90deg, var(--accent), #3b82f6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      margin-bottom: 20px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 10px;
+    }
+
+    th, td {
+      padding: 12px 10px;
+      text-align: center;
+      border-bottom: 1px solid #e5e7eb;
+      font-size: 15px;
+    }
+
+    th {
+      background: var(--accent);
+      color: white;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background: #f9fafb;
+    }
+
+    tr:hover {
+      background: #e0f2fe;
+      transition: background 0.3s;
+    }
+
+    .rank {
+      font-weight: bold;
+      font-size: 18px;
+    }
+
+    .winner {
+      font-weight: bold;
+      color: #10b981;
+    }
+
+    .back-btn {
+      display: block;
+      margin: 20px auto 0;
+      text-align: center;
+      padding: 10px 18px;
+      border-radius: 12px;
+      background: linear-gradient(135deg, var(--accent), #3b82f6);
+      color: white;
+      font-weight: 600;
+      text-decoration: none;
+      box-shadow: 0 5px 15px rgba(0,0,0,0.15);
+      transition: transform 0.2s, box-shadow 0.3s;
+    }
+    .back-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+    }
+
+    /* ألوان الميداليات */
+    .gold   { color: #facc15; font-size: 20px; }
+    .silver { color: #9ca3af; font-size: 20px; }
+    .bronze { color: #d97706; font-size: 20px; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+  </style>
+</head>
+<body>
+  <div class="leaderboard-container">
+    <h1>🏆 لوحة المتصدرين</h1>
+    <table id="leaderboardTable">
+      <thead>
+        <tr>
+          <th>الترتيب</th>
+          <th>الفائز</th>
+          <th>النتيجة</th>
+          <th>اللاعبون</th>
+          <th>التاريخ</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- البيانات من API -->
+      </tbody>
+    </table>
+    <a href="/" class="back-btn">🔙 رجوع للعبة</a>
+  </div>
+
+  <script>
+    async function loadLeaderboard() {
+      try {
+        const res = await fetch("/api/leaderboard");
+        const data = await res.json();
+        const tbody = document.querySelector("#leaderboardTable tbody");
+        tbody.innerHTML = "";
+
+        data.forEach((item, idx) => {
+          let medal = "";
+          if (idx === 0) medal = '<span class="gold">🥇</span>';
+          else if (idx === 1) medal = '<span class="silver">🥈</span>';
+          else if (idx === 2) medal = '<span class="bronze">🥉</span>';
+
+          const tr = document.createElement("tr");
+          tr.innerHTML = `
+            <td class="rank">${medal || "#" + (idx + 1)}</td>
+            <td class="winner">${item.winner}</td>
+            <td>${item.scores.A} - ${item.scores.B}</td>
+            <td>${item.players.map(p => p.name).join(" vs ")}</td>
+            <td>${new Date(item.timestamp).toLocaleString("ar-EG")}</td>
+          `;
+          tbody.appendChild(tr);
+        });
+      } catch (err) {
+        console.error("خطأ في تحميل لوحة المتصدرين:", err);
+      }
+    }
+
+    loadLeaderboard();
+  </script>
+</body>
+</html>

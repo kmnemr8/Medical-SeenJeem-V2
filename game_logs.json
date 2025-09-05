@@ -1,0 +1,44 @@
+[
+  {
+    "roomId": "1",
+    "winner": "khaled",
+    "scores": {
+      "A": 30,
+      "B": 10
+    },
+    "players": [
+      {
+        "id": "oLy-0Y-xnMi1GrbBAAAJ",
+        "name": "khaled",
+        "role": "A"
+      },
+      {
+        "id": "7apy8Uj-XtafCTRIAAAH",
+        "name": "ahmed",
+        "role": "B"
+      }
+    ],
+    "timestamp": "2025-09-05T00:51:00.293Z"
+  },
+  {
+    "roomId": "1",
+    "winner": "ahmed",
+    "scores": {
+      "A": 0,
+      "B": 30
+    },
+    "players": [
+      {
+        "id": "VOt9ePVrSOTL6bsAAAAN",
+        "name": "hendy",
+        "role": "A"
+      },
+      {
+        "id": "O9fCgha61YI7ZifaAAAR",
+        "name": "ahmed",
+        "role": "B"
+      }
+    ],
+    "timestamp": "2025-09-05T00:53:11.143Z"
+  }
+]
